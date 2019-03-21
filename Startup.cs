@@ -33,6 +33,7 @@ namespace Chat
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +55,9 @@ namespace Chat
             app.UseCookiePolicy();
 
             app.UseMvc();
+            app.UseSignalR(routes =>{
+                routes.MapHub<ChatHub>("/chat");
+            });
         }
     }
 }
