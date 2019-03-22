@@ -1,15 +1,8 @@
-﻿// const connection = new signalR.HubConnectionBuilder()
-// .withUrl("/chat")
-// .build();
-
-
-//receive message
-
-
-
+﻿
 async function startConnection(connection) {
     try {
-        connection.qs = window.chat.state;
+        console.log(encodeURI(window.chat.state));
+        connection = new signalR.HubConnectionBuilder().withUrl("/chat?user=" + JSON.stringify(window.chat.state)).build();
         await connection.start();
         loadChat(connection);
 
@@ -23,8 +16,6 @@ async function loadChat(connection){
         console.log(users);
     });
 }
-
-// send message
 
 document.getElementById("sendMessage").addEventListener("click", event => {
     window.chat.sendMessage();
@@ -45,7 +36,7 @@ function createChatController(){
 
     return {
         state : user,
-        connection: new signalR.HubConnectionBuilder().withUrl("/chat").build(),
+        connection: null,
         loadUser: function(){
             this.state.name =  prompt('Digite seu nome para entrar no chat', '');
             this.state.key = new Date().valueOf();
@@ -82,9 +73,9 @@ function createChatController(){
 
         },
         onReceiveMessage: function() {
-            this.connection.on(this.state.key, (sender, message) => {
+            this.connection.on("Receive", (sender, message) => {
                 console.log(y = suser);
             });
-        },
+        }
     };
 }
