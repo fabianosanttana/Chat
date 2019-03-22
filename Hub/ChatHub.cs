@@ -7,17 +7,12 @@ namespace Chat.Hubs
 {
    public class ChatHub : Hub
     {
-        private List<User> _users;
-        public ChatHub()
+        public override Task OnConnectedAsync()
         {
-            _users = new List<User>();
+            User user = (User)Context.Items["x"];
+            return base.OnConnectedAsync();
         }
 
-        public async Task AddUserToChat(User user)
-        {
-            _users.Add(user);
-            await Clients.All.SendAsync("chat", _users);
-        }
          /// <summary>
         /// Método responsável por encaminhar as mensagens pelo hub
         /// </summary>

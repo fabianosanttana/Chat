@@ -9,10 +9,8 @@
 
 async function startConnection(connection) {
     try {
-        
+        connection.qs = window.chat.state;
         await connection.start();
-        connection.invoke("addUserToChat", window.chat.state)
-        .catch(err => console.log(err));
         loadChat(connection);
 
     } catch (err) {
