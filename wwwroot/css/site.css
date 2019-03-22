@@ -1,50 +1,61 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+﻿
+* {
+  padding: 0;
+  margin: 0;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+  background: #ff9966;
+  background: -webkit-linear-gradient(to left, #ff5e62, #ff9966); 
+  background: linear-gradient(to left, #ff5e62, #ff9966); 
 }
+
+.main{
+  width: 80%;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user {
+  position: relative;
+  background-color: #fafafa;
+  padding: 10px;
+  border-radius: 4px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  font-family: monospace;
+  text-overflow: ellipsis;
+  margin: 4px;
+  cursor: pointer;
+  transition: opacity 500ms ease;
+}
+
+.user .user_icon{
+  font-size: 30px;
+  color: #ff6362;
+  text-transform:uppercase;
+}
+.user .user_name{
+  font-weight: 700;
+  font-size: 15px;
+  color: #5d5454;
+  text-transform: capitalize;
+}
+.user .user_date{
+  color: #606060;
+  font-size: small;
+}
+
+.user:hover{
+  opacity: .8;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -53,4 +64,8 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
+}
+
+.box_shadow_0{
+  box-shadow: 2px 2px 4px rgba(0,0,0,.2);
 }

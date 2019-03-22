@@ -1,7 +1,6 @@
 ﻿
 async function startConnection(connection) {
     try {
-        console.log(encodeURI(window.chat.state));
         connection = new signalR.HubConnectionBuilder().withUrl("/chat?user=" + JSON.stringify(window.chat.state)).build();
         await connection.start();
         loadChat(connection);
@@ -11,9 +10,27 @@ async function startConnection(connection) {
     }
 };
 
+function openChat(e){
+    var id =  $(e).data('id');
+    
+}
+
+function checkIfExist(id){
+    return $('section[data-id="'+id+'"]') && $('section[data-id="'+id+'"]').length > 0;
+}
+
 async function loadChat(connection){
     connection.on('chat', (users) => {
-        console.log(users);
+        $.each( users, function( key, value ) {
+            if(!checkIfExist(value.key)){
+            var user = '<section class="user box_shadow_0" onclick="openChat(this)" data-id="'+value.key+'">'+
+            '        <span class="user_icon">'+value.name.charAt(0)+'</span>'+
+            '        <p class="user_name">'+value.name+'</p>'+
+            '        <span class="user_date">'+new Date(value.dtConnection).toLocaleDateString()+'</span>'+
+            '    </section>';
+            $('.main').append(user);
+            }
+          });
     });
 }
 
