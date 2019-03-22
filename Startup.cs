@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Chat.Hubs;
 
 namespace Chat
 {
@@ -33,6 +34,8 @@ namespace Chat
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //Adicionando o signalR como um serviço da aplicação
             services.AddSignalR();
         }
 
@@ -55,6 +58,8 @@ namespace Chat
             app.UseCookiePolicy();
 
             app.UseMvc();
+
+            //Aqui indicaremos nossas rotas para nossos hubs
             app.UseSignalR(routes =>{
                 routes.MapHub<ChatHub>("/chat");
             });
