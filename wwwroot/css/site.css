@@ -18,13 +18,15 @@ body {
   flex-wrap: wrap;
 }
 
+/* Estilo dos cards representando usuário logado */
+
 .user {
   position: relative;
   background-color: #fafafa;
   padding: 10px;
   border-radius: 4px;
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -34,6 +36,7 @@ body {
   margin: 4px;
   cursor: pointer;
   transition: opacity 500ms ease;
+  text-align: center;
 }
 
 .user .user_icon{
@@ -56,15 +59,90 @@ body {
   opacity: .8;
 }
 
-.footer {
+/* Estilo para chat */
+
+.chats_wrapper {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+  display: flex;
+  justify-content: flex-end;
 }
+
+.chats_wrapper .chat{
+  position: relative;
+  width: 300px;
+  display: block;
+  font-family: sans-serif;
+  margin: 0px 5px;
+  background-color: #fafafa;
+  border-radius: 5px 5px 0 0;
+}
+.chats_wrapper .chat header{
+  background: #293239;
+  border-radius: 5px 5px 0 0;
+  color: #fff;
+  cursor: pointer;
+  padding: 16px 24px;
+}
+.chats_wrapper .chat main{
+  height: 270px;
+  padding: 5px;
+  overflow-y: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  flex-flow: column;
+}
+.chats_wrapper .chat main .message{
+    width: fit-content;
+    word-break: break-word;
+    white-space: normal;
+    padding: 10px;
+    border-radius: 20px;
+    margin: 5px 0px;
+    height: fit-content;
+    height: -moz-fit-content;
+    position: relative;
+}
+.chats_wrapper .chat main .message.their{
+  background-color: #add1ff;
+}
+.chats_wrapper .chat main .message.me{
+  background-color: #adffca;
+  justify-self: flex-end;
+  align-self: flex-end;
+}
+.chats_wrapper .chat main .me span, .chats_wrapper .chat main .their span{
+  font-size: 10px;
+  color: #606060;
+}
+.chats_wrapper .chat footer{
+  padding: 15px;
+}
+.chats_wrapper .chat footer input{
+  border: 1px solid #add1ff;
+  width: 70%;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 20px !important;
+  outline: none;
+}
+.chats_wrapper .chat footer a{
+font-size: medium;
+color: #2196F3;
+padding: 5px;
+cursor:pointer;
+}
+.chats_wrapper .chat.minimize{
+
+}
+.chats_wrapper .chat.maximize{
+
+}
+
+/* Estilos genéricos */
 
 .box_shadow_0{
   box-shadow: 2px 2px 4px rgba(0,0,0,.2);

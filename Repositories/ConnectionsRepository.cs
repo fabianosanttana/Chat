@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chat.Models;
 
-namespace Chat.Repository
+namespace Chat.Repositories
 {
     public class ConnectionsRepository
     {
@@ -28,27 +28,5 @@ namespace Chat.Repository
             select con.Value
             ).ToList();
         }
-
-        // public void Remove(T key, string connectionId)
-        // {
-        //     lock (_connections)
-        //     {
-        //         HashSet<string> connections;
-        //         if (!_connections.TryGetValue(key, out connections))
-        //         {
-        //             return;
-        //         }
-
-        //         lock (connections)
-        //         {
-        //             connections.Remove(connectionId);
-
-        //             if (connections.Count == 0)
-        //             {
-        //                 _connections.Remove(key);
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
