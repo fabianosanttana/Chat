@@ -4,12 +4,15 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Chat.Repositories;
 using Newtonsoft.Json;
+using Chat.Interfaces;
 
 namespace Chat.Hubs
 {
    public class ChatHub : Hub
     {
-        private readonly static ConnectionsRepository _connections = new ConnectionsRepository();
+        private readonly IChatRepository _repository;
+
+        public ChatHub(IChatRepository chatRepository) => _repository = chatRepository;
 
         /// <summary>
         /// Override para inserir cada usuário no nosso repositório, lembrando que esse repositório está em memória
@@ -18,12 +21,20 @@ namespace Chat.Hubs
         public override Task OnConnectedAsync()
         {
             var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
-            _connections.Add(Context.ConnectionId, user);
+            _repository.Add(Context.ConnectionId, user);
+            
             //Ao usar o método All eu estou enviando a mensagem para todos os usuários conectados no meu Hub
-            Clients.All.SendAsync("chat", _connections.GetAllUser(), user);
+            Clients.All.SendAsync("chat", _repository.GetUsers(), user);
             return base.OnConnectedAsync();
         }
 
+        public override Task OnDisconnectedAsync(System.Exception exception)
+        {
+            _repository.Disconnect(Context.ConnectionId);
+            Clients.All.SendAsync("chat", _repository.GetUsers());
+
+            return base.OnDisconnectedAsync(exception);
+        }
 
         /// <summary>
         /// Método responsável por encaminhar as mensagens pelo hub
@@ -32,8 +43,7 @@ namespace Chat.Hubs
         /// <returns></returns>
         public async Task SendMessage(ChatMessage chat)
         {
-            //Ao usar o método Client(_connections.GetUserId(chat.destination)) eu estou enviando a mensagem apenas para o usuário destino, não realizando broadcast
-            await Clients.Client(_connections.GetUserId(chat.destination)).SendAsync("Receive", chat.sender, chat.message);
+            await Clients.Client(_repository.GetUserByKey(chat.destination).key.ToString()).SendAsync("Receive", chat.sender, chat.message);
         }
     }
 }

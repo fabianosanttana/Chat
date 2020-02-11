@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Chat.Hubs;
+using Chat.Commums;
+using Chat.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Chat
 {
@@ -32,8 +31,9 @@ namespace Chat
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddDbContext<ChatContext>(opt => opt.UseInMemoryDatabase("chat"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDependencyInjections();
 
             //Adicionando o signalR como um serviço da aplicação
             services.AddSignalR();

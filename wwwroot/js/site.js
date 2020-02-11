@@ -41,6 +41,7 @@ function createChatController(){
         //Método responsável por receber as mensagens
         onReceiveMessage: function() {
             this.connection.on("Receive", (sender, message) => {
+                debugger;
                 openChat(null, sender, message);
             });
         }

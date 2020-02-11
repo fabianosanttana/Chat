@@ -1,16 +1,14 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Chat.Models
 {
-    public class ChatMessage
+    public class User
     {
-        public Int64 destination { get; set; }   
-        public User sender {get;set;}       
-        public string message {get;set;}   
-    }
-    public class User{
         public string name {get;set;}
+        [Key]
         public Int64 key { get; set; } 
-        public DateTime dtConnection { get; set; }       
+        public DateTime dtConnection { get; set; }
+        public string connectionHost {get; set;}       
     }
 }
