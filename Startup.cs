@@ -32,7 +32,7 @@ namespace Chat
             });
 
             services.AddDbContext<ChatContext>(opt => opt.UseInMemoryDatabase("chat"));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddDependencyInjections();
 
             //Adicionando o signalR como um serviço da aplicação
@@ -57,8 +57,10 @@ namespace Chat
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc();
-
+            app.UseRouting();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapRazorPages();
+            });
             //Aqui indicaremos nossas rotas para nossos hubs
             app.UseSignalR(routes =>{
                 routes.MapHub<ChatHub>("/chat");

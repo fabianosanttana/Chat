@@ -1,10 +1,8 @@
 using Chat.Models;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Chat.Repositories;
-using Newtonsoft.Json;
 using Chat.Interfaces;
+using System.Text.Json;
 
 namespace Chat.Hubs
 {
@@ -20,7 +18,7 @@ namespace Chat.Hubs
         /// <returns> Retorna lista de usuário no chat e usuário que acabou de logar </returns>
         public override Task OnConnectedAsync()
         {
-            var user = JsonConvert.DeserializeObject<User>(Context.GetHttpContext().Request.Query["user"]);
+            var user = JsonSerializer.Deserialize<User>(Context.GetHttpContext().Request.Query["user"]);
             _repository.Add(Context.ConnectionId, user);
             
             //Ao usar o método All eu estou enviando a mensagem para todos os usuários conectados no meu Hub
