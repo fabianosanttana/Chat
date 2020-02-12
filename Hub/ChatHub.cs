@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using Chat.Interfaces;
 using System.Text.Json;
+using System;
 
 namespace Chat.Hubs
 {
-   public class ChatHub : Hub
+    public class ChatHub : Hub
     {
         private readonly IChatRepository _repository;
+        private readonly Guid publicId = Guid.Parse("9355b61a-e9f1-42df-9ebe-12b073f56c72");
 
         public ChatHub(IChatRepository chatRepository) => _repository = chatRepository;
 
@@ -18,9 +20,8 @@ namespace Chat.Hubs
         /// <returns> Retorna lista de usuário no chat e usuário que acabou de logar </returns>
         public override Task OnConnectedAsync()
         {
-            var user = JsonSerializer.Deserialize<User>(Context.GetHttpContext().Request.Query["user"]);
-            _repository.Add(Context.ConnectionId, user);
-            
+            var userQuery = JsonSerializer.Deserialize<User>(Context.GetHttpContext().Request.Query["user"]);
+            var user = _repository.Add(Context.ConnectionId, userQuery);
             //Ao usar o método All eu estou enviando a mensagem para todos os usuários conectados no meu Hub
             Clients.All.SendAsync("chat", _repository.GetUsers(), user);
             return base.OnConnectedAsync();
@@ -41,7 +42,13 @@ namespace Chat.Hubs
         /// <returns></returns>
         public async Task SendMessage(ChatMessage chat)
         {
-            await Clients.Client(_repository.GetUserByKey(chat.destination).key.ToString()).SendAsync("Receive", chat.sender, chat.message);
+            if (chat.toId.Equals(publicId))
+            {
+                await Clients.All.SendAsync("public", chat.from, chat.message);
+                return;
+            }
+            var connection = _repository.GetUserByKey(chat.toId).connectionHost;
+            await Clients.Client(connection).SendAsync("Receive", chat.from, chat.message);
         }
     }
 }

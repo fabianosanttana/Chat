@@ -31,7 +31,7 @@ namespace Chat
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ChatContext>(opt => opt.UseInMemoryDatabase("chat"));
+            services.AddDbContext<ChatContext>(opt => opt.UseInMemoryDatabase("Chat"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddDependencyInjections();
 
@@ -58,11 +58,13 @@ namespace Chat
             app.UseCookiePolicy();
 
             app.UseRouting();
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapRazorPages();
             });
             //Aqui indicaremos nossas rotas para nossos hubs
-            app.UseSignalR(routes =>{
+            app.UseSignalR(routes =>
+            {
                 routes.MapHub<ChatHub>("/chat");
             });
         }

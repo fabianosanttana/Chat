@@ -5,9 +5,9 @@
 
 function createChatController() {
   var user = {
-    key: null,
     name: null,
-    dtConnection: null
+    dtConnection: null,
+    key: null
   };
 
   return {
@@ -15,11 +15,11 @@ function createChatController() {
     connection: null,
     loadUser: function() {
       this.state.name = prompt(
-        "Digite seu nome para entrar no chat",
+        "Digite seu apelido para entrar no chat",
         "Usuário"
       );
-      this.state.key = new Date().valueOf();
       this.state.dtConnection = new Date();
+      this.state.key = new Date().valueOf();
       this.connectUserToChat();
     },
     connectUserToChat: function() {
@@ -28,9 +28,9 @@ function createChatController() {
     },
     sendMessage: function(to) {
       var chatMessage = {
-        sender: this.state,
+        from: this.state,
         message: to.message,
-        destination: to.destination
+        toId: to.destination
       };
 
       //Esse trecho é responsável por encaminhar a mensagem para o usuário selecionado
@@ -45,7 +45,6 @@ function createChatController() {
     //Método responsável por receber as mensagens
     onReceiveMessage: function() {
       this.connection.on("Receive", (sender, message) => {
-        debugger;
         openChat(null, sender, message);
       });
     }
