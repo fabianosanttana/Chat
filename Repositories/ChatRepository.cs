@@ -38,7 +38,7 @@ namespace Chat.Repositories
 
         public User GetUserByKey(Int64 key)
         {
-            return _context.Users.FirstOrDefault(obj => obj.key == obj.key);
+            return _context.Users.FirstOrDefault(obj => obj.key.Equals(key));
         }
     }
 }

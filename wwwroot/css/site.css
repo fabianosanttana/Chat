@@ -127,6 +127,14 @@ body {
   justify-self: flex-end;
   align-self: flex-end;
 }
+.chats_wrapper .chat main .message .senderNameMessage {
+  font-size: 12px;
+  text-align: right;
+  display: block;
+  color: red;
+  font-weight: 800;
+}
+
 .chats_wrapper .chat main .me span,
 .chats_wrapper .chat main .their span {
   font-size: 10px;

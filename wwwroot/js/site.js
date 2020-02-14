@@ -2,7 +2,7 @@
   window.chat = createChatController();
   window.chat.loadUser();
 });
-
+const publicId = 12345678910;
 function createChatController() {
   var user = {
     name: null,
@@ -39,13 +39,22 @@ function createChatController() {
         .catch(err => console.log((x = err)));
 
       //Método responsável por inserir a mensagem no chat
-      insertMessage(chatMessage.destination, "me", chatMessage.message);
+      insertMessage(
+        chatMessage.toId,
+        "me",
+        chatMessage.message,
+        chatMessage.from.name
+      );
       to.field.val("").focus();
     },
     //Método responsável por receber as mensagens
     onReceiveMessage: function() {
       this.connection.on("Receive", (sender, message) => {
-        openChat(null, sender, message);
+        openChat(null, sender, message, false);
+      });
+
+      this.connection.on("Public", (sender, message) => {
+        openChat(null, sender, message, true);
       });
     }
   };
@@ -80,10 +89,7 @@ async function loadChat(connection) {
     const listUsers = data => {
       return users
         .map(u => {
-          if (
-            !checkIfElementExist(u.key, "id") &&
-            u.key != window.chat.state.key
-          )
+          if (u.key != window.chat.state.key)
             return `
               <section class="user box_shadow_0" onclick="openChat(this)" data-id="${
                 u.key
@@ -98,42 +104,61 @@ async function loadChat(connection) {
         })
         .join("");
     };
-
-    $(".main").append(listUsers);
+    verifyOpenChats(users);
+    $(".main")
+      .empty()
+      .append(listUsers);
+  });
+}
+function verifyOpenChats(users) {
+  document.querySelectorAll("section.chat").forEach(e => {
+    var value = $(e).data("chat");
+    if (!users.some(obj => obj.key == value) && $(e).data('chat') != publicId) $(e).remove();
   });
 }
 
 //Método responsável por iniciar um novo chat
-function openChat(e, sender, message) {
+function openChat(e, sender, message, public) {
   var user = {
     id: e ? $(e).data("id") : sender.key,
     name: e ? $(e).data("name") : sender.name
   };
-
-  if (!checkIfElementExist(user.id, "chat")) {
+  if (!checkIfElementExist(public ? publicId : user.id, "chat")) {
     const chat = `
-        <section class="chat" data-chat="${user.id}">
+        <section class="chat" data-chat="${public ? publicId : user.id}">
         <header>
-            ${user.name}
+            ${public ? "Publico" : user.name}
         </header>
         <main>
         </main>
         <footer>
-            <input type="text" placeholder="Digite aqui sua mensagem" data-chat="${user.id}">
-            <a onclick="sendMessage(this)" data-chat="${user.id}">Enviar</a>
+            <input type="text" placeholder="Digite aqui sua mensagem" data-chat="${
+              public ? publicId : user.id
+            }">
+            <a onclick="sendMessage(this)" data-chat="${
+              public ? publicId : user.id
+            }">Enviar</a>
         </footer>
         </section>
         `;
 
     $(".chats_wrapper").append(chat);
   }
-  if (sender && message) insertMessage(sender.key, "their", message);
+  if (public && sender.key == window.chat.state.key) return;
+  
+  if (sender && message)
+    insertMessage(
+      public ? publicId : sender.key,
+      "their",
+      message,
+      sender.name
+    );
 }
 
 //Método responsável por inserir a mensagem no chat
-function insertMessage(target, who, message) {
+function insertMessage(target, who, message, name) {
   const chatMessage = `
-    <div class="message ${who}">${message} <span>${new Date().toLocaleTimeString()}</span></div>
+    <div class="message ${who}"><span class="senderNameMessage">${name}</span>${message} <span>${new Date().toLocaleTimeString()}</span></div>
     `;
   $(`section[data-chat="${target}"]`)
     .find("main")

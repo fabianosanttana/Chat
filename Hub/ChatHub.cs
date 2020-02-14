@@ -10,7 +10,7 @@ namespace Chat.Hubs
     public class ChatHub : Hub
     {
         private readonly IChatRepository _repository;
-        private readonly Guid publicId = Guid.Parse("9355b61a-e9f1-42df-9ebe-12b073f56c72");
+        private readonly Int64 publicId = 12345678910;
 
         public ChatHub(IChatRepository chatRepository) => _repository = chatRepository;
 
@@ -44,7 +44,7 @@ namespace Chat.Hubs
         {
             if (chat.toId.Equals(publicId))
             {
-                await Clients.All.SendAsync("public", chat.from, chat.message);
+                await Clients.All.SendAsync("Public", chat.from, chat.message);
                 return;
             }
             var connection = _repository.GetUserByKey(chat.toId).connectionHost;
